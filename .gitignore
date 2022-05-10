@@ -1,0 +1,5 @@
+.ipynb_checkpoints
+*.py[cod]
+*.swp
+*.egg-info/
+*.DS_Store
