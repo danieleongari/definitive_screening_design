@@ -12,10 +12,10 @@ if __name__ == '__main__':
           author="Daniele Ongari",
           author_email="Daniele.Ongari@Solvay.com",
           description="Definitive Screening Design",
-          url="TO BE DEFINED",
+          url="https://github.com/danieleongari/definitive_screening_design",
           license="None",
           classifiers=["Programming Language :: Python"],
-          version="0.1.0",
+          version="0.1.1",
           install_requires=[
           "numpy",
           "pandas",
