@@ -216,26 +216,26 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd"):
         tmpf[2 * rowidx, :] = f[rowidx, :]
         tmpf[2 * rowidx+1, :] = f[rowidx + int(nr/2), :]
     f = tmpf.copy()
-    
-    if designChoice == "dsd":
-        B = np.array([
-            [-1, -1, -1],
-            [+1, +1, +1]
-        ])
-        for fidx in range(nctn, nf):
-            if ncat > 1:
-                colidx = np.remainder(fidx - nctn - 1, 3)
-                f[nr:(nr+2), fidx] = B[:, colidx] # WEIRD: colidx is not important as all columns of B are same
-    elif designChoice == "orth":
-        B = np.array([
-            [-1, -1, -1, +1],
-            [-1, -1, +1, -1],
-            [-1, +1, -1, -1],
-            [+1, -1, -1, -1]
-        ])
-        for fidx in range(nctn, nf):
-            if ncat > 1:
-                colidx = np.remainder(fidx - nctn - 1, 4)
+
+    # Correct the categorical values of the centers
+    if ncat > 1:
+        if designChoice == "dsd": # there are 2 centers
+            B = np.array([
+                [-1, -1, -1],
+                [+1, +1, +1]
+            ])
+            for fidx in range(nctn, nf):
+                colidx = np.remainder(fidx - nctn, 3)
+                f[nr:(nr+2), fidx] = B[:, colidx] # WEIRD: colidx is not important as all columns of B are same!
+        elif designChoice == "orth": # there are 4 centers
+            B = np.array([
+                [-1, -1, -1, +1],
+                [-1, -1, +1, -1],
+                [-1, +1, -1, -1],
+                [+1, -1, -1, -1]
+            ])
+            for fidx in range(nctn, nf):
+                colidx = np.remainder(fidx - nctn, 4)
                 f[nr:(nr+4), fidx] = B[:, colidx]
 
     # Add columns for categoricals
