@@ -71,7 +71,7 @@ def get_paley_matrix(q):
     return paley_matrix
 
 
-def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
+def compute_dsd(nctn, ncat=0, designChoice="dsd"):
     """DSD calculates definitive screening design conditions given an number 
     of continuous (nf) and categorical (ncat) factors, based on:
 
@@ -163,10 +163,6 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
         else:
             p = p + 2
 
-    if verbose:
-        print("Initial f")
-        print(f)
-
     # Overvrite f for certain nf
     if nf == 9:
         f = f10[:,:9]
@@ -182,9 +178,7 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
         strt = np.array([-1, -1,  1, -1,  1,  1,  1,  1,  1, -1,  1,  1, 1])
         b = np.array([])
         ## construct B
-        for ii in range(13):
-            if verbose:
-                print(b)
+        for _ in range(13):
             if b.size==0:
                 b = np.transpose(strt)
             else:
@@ -217,19 +211,11 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
             zero_nrows = 4
     f = np.vstack((f, np.zeros((zero_nrows, nf))))
 
-    if verbose:
-        print("Before tmpf")
-        print(f)
-
     tmpf = f.copy()
     for rowidx in range(int(nr/2)):
         tmpf[2 * rowidx, :] = f[rowidx, :]
         tmpf[2 * rowidx+1, :] = f[rowidx + int(nr/2), :]
     f = tmpf.copy()
-
-    if verbose:
-        print("Before designChoice")
-        print(f)
 
     if designChoice == "dsd":
         B = np.array([
@@ -251,10 +237,6 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
             if ncat > 1:
                 colidx = np.remainder(fidx - nctn - 1, 4)
                 f[nr:(nr+2), fidx] = B[:, colidx]
-
-    if verbose:
-        print("Before ncat>0")
-        print(f)
 
     # Add columns for categoricals
     # Note: in the original code there was minList2 and maxList2 lists that seem unnecessary
