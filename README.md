@@ -1,10 +1,8 @@
 # Definitive Screening design
 
-Authored by: Daniele Ongari
+## References
 
-## Reference
-
-Jones, Bradley, and Christopher J. Nachtsheim. “A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects.” Journal of Quality Technology 43, no. 1 (January 2011): 1–15. https://doi.org/10.1080/00224065.2011.11917841.
+- Jones, Bradley, and Christopher J. Nachtsheim. “A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects.” Journal of Quality Technology 43, no. 1 (January 2011): 1–15. https://doi.org/10.1080/00224065.2011.11917841.
 
 ## Installation
 ```
