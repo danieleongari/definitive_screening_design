@@ -4,11 +4,11 @@
 
 - Jones, Bradley, and Christopher J. Nachtsheim. “A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects.” Journal of Quality Technology 43, no. 1 (January 2011): 1–15. https://doi.org/10.1080/00224065.2011.11917841.
 
+- Jones, Bradley, and Christopher J. Nachtsheim. "Definitive screening designs with added two-level categorical factors." Journal of Quality Technology 45.2 (2013): 121-129. https://doi.org/10.1080/00224065.2013.11917921
+
 ## Installation
 ```
-git clone ...
-cd definitive_screening_design
-pip install -e .
+pip install definitive_screening_design
 ```
 
 ## Example
