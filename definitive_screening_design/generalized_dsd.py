@@ -216,7 +216,7 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd"):
         tmpf[2 * rowidx, :] = f[rowidx, :]
         tmpf[2 * rowidx+1, :] = f[rowidx + int(nr/2), :]
     f = tmpf.copy()
-
+    
     if designChoice == "dsd":
         B = np.array([
             [-1, -1, -1],
@@ -225,18 +225,18 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd"):
         for fidx in range(nctn, nf):
             if ncat > 1:
                 colidx = np.remainder(fidx - nctn - 1, 3)
-                f[nr:(nr+3), fidx] = B[:, colidx]
+                f[nr:(nr+2), fidx] = B[:, colidx] # WEIRD: colidx is not important as all columns of B are same
     elif designChoice == "orth":
         B = np.array([
             [-1, -1, -1, +1],
             [-1, -1, +1, -1],
             [-1, +1, -1, -1],
-            [ 1, -1, -1, -1]
+            [+1, -1, -1, -1]
         ])
         for fidx in range(nctn, nf):
             if ncat > 1:
                 colidx = np.remainder(fidx - nctn - 1, 4)
-                f[nr:(nr+2), fidx] = B[:, colidx]
+                f[nr:(nr+4), fidx] = B[:, colidx]
 
     # Add columns for categoricals
     # Note: in the original code there was minList2 and maxList2 lists that seem unnecessary
