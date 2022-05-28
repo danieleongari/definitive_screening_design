@@ -4,7 +4,8 @@ Ported from JMP script to Matlab 04-Mar-2015
 Jacob Albrecht, BMS
 
 Ported to Python on Saturday 28-May-2022, 
-when oudoor it was warm and sunny but my passion for open-source code kept me at home
+when outdoor it was warm and sunny but my passion for open-source code kept me at home
+(for the record: as soon as I wrote this, the weather changed to rain...)
 Daniele Ongari
 
 Copyright (c) 2015, Jacob Albrecht
@@ -251,32 +252,33 @@ def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
                 colidx = np.remainder(fidx - nctn - 1, 4)
                 f[nr:(nr+2), fidx] = B[:, colidx]
 
-
     if verbose:
         print("Before ncat>0")
         print(f)
 
-    nr = f.shape[0] # Update nr
-
     # Add columns for categoricals
+    # Note: in the original code there was minList2 and maxList2 lists that seem unnecessary
+    #       and were replaced here with minCatLevel and maxCatLevel, which are simply 1 and 2
     if ncat > 0:
-        minList2 = np.ones((ncat, 1))
-        maxList2 = 2 * np.ones((ncat, 1))
-
-        for fidx in range(nctn, nf):
-            for rowidx in range(nr):
+        minCatLevel = 1
+        maxCatLevel = 2
+        nr = f.shape[0] # Update nr
+        for fidx in range(nctn, nf): # categorical columns
+            for rowidx in range(nr): # all rows
                 if f[rowidx, fidx] == 1:
-                    f[rowidx, fidx] = maxList2[fidx - nctn]
+                    f[rowidx, fidx] = maxCatLevel
                 if f[rowidx, fidx] == -1:
-                    f[rowidx, fidx] = minList2[fidx - nctn]
+                    f[rowidx, fidx] = minCatLevel
                 if f[rowidx, fidx] == 0:
-                    if designChoice == "orth":
-                        f[rowidx, fidx] = maxList2[fidx - nctn]
-                    else:
-                        # even rows are mins, odd rows are maxes
-                        if (np.remainder(rowidx, 2) == 0):
-                            f[rowidx, fidx] = minList2[fidx - nctn]
+                    if designChoice == "dsd":
+                        # in matlab even rows are minCatLevel, odd rows are maxCatLevel
+                        # but this is the opposite in python where idx starts from 0
+                        if np.remainder(rowidx, 2) != 0:
+                            f[rowidx, fidx] = minCatLevel
                         else:
-                            f[rowidx, fidx] = maxList2[fidx - nctn]
+                            f[rowidx, fidx] = maxCatLevel
+                    elif designChoice == "orth":
+                        f[rowidx, fidx] = maxCatLevel
+
 
     return f
