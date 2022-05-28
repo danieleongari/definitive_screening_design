@@ -70,7 +70,7 @@ def get_paley_matrix(q):
     return paley_matrix
 
 
-def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
+def compute_dsd(nctn, ncat=0, designChoice="dsd", verbose=False):
     """DSD calculates definitive screening design conditions given an number 
     of continuous (nf) and categorical (ncat) factors, based on:
 
@@ -86,9 +86,9 @@ def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
     Inputs: nctn: Number of continuous factors
             ncat: number of categorical factors
             designChoice:
-                    1 or 'DSD': De-alias all two-factor interactions with
+                    1 or 'dsd': De-alias all two-factor interactions with
                         categorical factors. (Default)
-                    2 or 'ORTH': Make orthogonal main-effects plan.
+                    2 or 'orth': Make orthogonal main-effects plan.
 
     Outputs: f: design matrix (-1,0,or 1) with a column for each of the
                 three level continuous variables, 1 or 2 for two level
@@ -99,8 +99,8 @@ def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
 
     See also ROWEXCH, DAUGMENT, DCOVARY, X2FX, CORDEXCH
     """
-    if designChoice not in ["DSD", "ORTH"]:
-        raise Exception("Design Choice must be 'DSD' or 'ORTH'")
+    if designChoice not in ["dsd", "orth"]:
+        raise Exception("Design Choice must be 'dsd' or 'orth'")
 
     f10 = np.array([
         [ 0,  1,  1,  1,  1,  1,  1,  1,  1,  1],
@@ -210,9 +210,9 @@ def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
     elif ncat == 1:
         zero_nrows = 2
     elif ncat > 1:
-        if designChoice == "DSD":
+        if designChoice == "dsd":
             zero_nrows = 2
-        elif designChoice == "ORTH":
+        elif designChoice == "orth":
             zero_nrows = 4
     f = np.vstack((f, np.zeros((zero_nrows, nf))))
 
@@ -230,7 +230,7 @@ def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
         print("Before designChoice")
         print(f)
 
-    if designChoice == "DSD":
+    if designChoice == "dsd":
         B = np.array([
             [-1, -1, -1],
             [+1, +1, +1]
@@ -239,7 +239,7 @@ def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
             if ncat > 1:
                 colidx = np.remainder(fidx - nctn - 1, 3)
                 f[nr:(nr+3), fidx] = B[:, colidx]
-    elif designChoice == "ORTH":
+    elif designChoice == "orth":
         B = np.array([
             [-1, -1, -1, +1],
             [-1, -1, +1, -1],
@@ -270,7 +270,7 @@ def compute_dsd(nctn, ncat=0, designChoice="DCD", verbose=False):
                 if f[rowidx, fidx] == -1:
                     f[rowidx, fidx] = minList2[fidx - nctn]
                 if f[rowidx, fidx] == 0:
-                    if designChoice == "ORTH":
+                    if designChoice == "orth":
                         f[rowidx, fidx] = maxList2[fidx - nctn]
                     else:
                         # even rows are mins, odd rows are maxes
