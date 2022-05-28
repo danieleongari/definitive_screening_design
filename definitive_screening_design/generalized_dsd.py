@@ -73,7 +73,7 @@ def get_paley_matrix(q):
 
 def compute_dsd(nctn, ncat=0, designChoice="dsd"):
     """DSD calculates definitive screening design conditions given an number 
-    of continuous (nf) and categorical (ncat) factors, based on:
+    of continuous (nctn) and categorical (ncat) factors, based on:
 
     Jones, B and Nachtsheim, C. (2011)
         "A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects"

@@ -4,11 +4,13 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
+from .generalized_dsd import compute_dsd
+
 THIS_DIR = Path(__file__).resolve().parents[0]
 TABS_DIR = THIS_DIR / ".." / "tabs"
 
 def create(factors) -> pd.DataFrame:
-    """Retrieve and create the design.
+    """Retrieve the DSD design (Jones 2011).
     Factors is a list of factors names or an integer (number of factors).
 
     TODO: provide the -1, 0, +1 values.
@@ -31,10 +33,21 @@ def create(factors) -> pd.DataFrame:
     df.columns = factors
 
     # Move the last row (conventionally having the center) on top
-    # I like having the center as "zeroth" row, at the start!
-    df = df.apply(np.roll, shift=1)
+    # You may like having the center as "zeroth" row, at the start!
+    # df = df.apply(np.roll, shift=1)
 
     return df
+
+def generate(n_cont_factors, n_cat_factors, method='dsd'):
+    """Generate DSD with 2-levels categoricals design from calculation (Jones 2013)."""
+    return pd.DataFrame(
+        compute_dsd(n_cont_factors,n_cat_factors,method),
+        columns=[ f"X{i:02d}" for i in range(1, n_cont_factors+1) ] + [ f"C{i:02d}" for i in range(1, n_cat_factors+1) ]
+    )
+
+
+
+
     
 
 
