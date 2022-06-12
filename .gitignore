@@ -3,3 +3,4 @@
 *.swp
 *.egg-info/
 *.DS_Store
+*.m

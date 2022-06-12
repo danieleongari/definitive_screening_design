@@ -5,7 +5,6 @@ Jacob Albrecht, BMS
 
 Ported to Python on Saturday 28-May-2022, 
 when outdoor it was warm and sunny but my passion for open-source code kept me at home
-(for the record: as soon as I wrote this, the weather changed to rain...)
 Daniele Ongari
 
 Copyright (c) 2015, Jacob Albrecht
