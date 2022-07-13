@@ -20,6 +20,7 @@ if __name__ == '__main__':
           "numpy",
           "pandas",
           "pyxlsb",
+          "sympy"
           ],
           extras_require={
               "testing": ["pytest==6.2.5", "pytest-cov==2.12.1"],
