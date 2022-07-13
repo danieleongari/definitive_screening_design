@@ -11,8 +11,8 @@
 pip install definitive_screening_design
 ```
 
-## Example
-
+## Examples
+### Continuous-variables only (retrieving tables from the 2011 paper)
 ```
 import definitive_screening_design
 definitive_screening_design.create(4)
@@ -29,7 +29,7 @@ definitive_screening_design.create(4)
 |  7 |    -1 |     1 |     1 |     0 |
 |  8 |     1 |    -1 |    -1 |     0 |
 
-or 
+or, specifying the variables' names 
 
 ```
 definitive_screening_design.create(['Factor1', 'Factor-2', 'Factor-3', 'Factor-4'])
@@ -45,3 +45,25 @@ definitive_screening_design.create(['Factor1', 'Factor-2', 'Factor-3', 'Factor-4
 |  6 |         1 |          1 |          0 |          1 |
 |  7 |        -1 |          1 |          1 |          0 |
 |  8 |         1 |         -1 |         -1 |          0 |
+
+### Both continuous and 2-levels categoricals variables (2013 paper)
+```
+import definitive_screening_design
+definitive_screening_design.generate(n_cont_factors=3, n_cat_factors=2)
+```
+|    |   X01 |   X02 |   X03 |   C01 |   C02 |
+|---:|------:|------:|------:|------:|------:|
+|  0 |     0 |     1 |     1 |     2 |     2 |
+|  1 |    -0 |    -1 |    -1 |     1 |     1 |
+|  2 |     1 |     0 |    -1 |     2 |     2 |
+|  3 |    -1 |    -0 |     1 |     1 |     1 |
+|  4 |     1 |    -1 |     0 |     1 |     2 |
+|  5 |    -1 |     1 |    -0 |     2 |     1 |
+|  6 |     1 |     1 |    -1 |     2 |     1 |
+|  7 |    -1 |    -1 |     1 |     1 |     2 |
+|  8 |     1 |     1 |     1 |     1 |     2 |
+|  9 |    -1 |    -1 |    -1 |     2 |     1 |
+| 10 |     1 |    -1 |     1 |     2 |     1 |
+| 11 |    -1 |     1 |    -1 |     1 |     2 |
+| 12 |     0 |     0 |     0 |     1 |     1 |
+| 13 |     0 |     0 |     0 |     2 |     2 |
