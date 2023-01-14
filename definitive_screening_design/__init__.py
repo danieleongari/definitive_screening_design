@@ -1,8 +1,10 @@
-"""MEain function to generate a Definitive Screening design."""
+"""Main function to generate a Definitive Screening design."""
 import numpy as np
 import pandas as pd
 
 from .generalized_dsd import compute_dsd
+
+__version__ = "0.3.0"
 
 def generate(n_num=0, n_cat=0, factors_dict=None, method='dsd', min_13=True, n_fake_factors=0, verbose=True) -> pd.DataFrame:
     """Generate DSD with 2-levels categoricals design from calculation (Jones 2013).
