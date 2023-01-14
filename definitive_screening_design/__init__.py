@@ -1,10 +1,10 @@
-"""All the functions you need are in this init module."""
+"""MEain function to generate a Definitive Screening design."""
 import numpy as np
 import pandas as pd
 
 from .generalized_dsd import compute_dsd
 
-def generate(n_num, n_cat, factors_dict=None, method='dsd', min_13=True, n_fake_factors=0, verbose=True) -> pd.DataFrame:
+def generate(n_num=0, n_cat=0, factors_dict=None, method='dsd', min_13=True, n_fake_factors=0, verbose=True) -> pd.DataFrame:
     """Generate DSD with 2-levels categoricals design from calculation (Jones 2013).
     
     INPUTS
@@ -46,6 +46,8 @@ def generate(n_num, n_cat, factors_dict=None, method='dsd', min_13=True, n_fake_
             Table with DSD trials. Order is not randomized.
 
     """
+
+    assert n_num+n_cat>0 or factors_dict is not None, "You need to specify at least n_num>0 or n_cat>0."
 
     num_nms, cat_nms = [], []
     if factors_dict is None:
