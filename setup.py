@@ -19,8 +19,9 @@ if __name__ == '__main__':
           install_requires=[
           "numpy",
           "pandas",
-          "pyxlsb",
-          "sympy"
+          "sympy",
+          "matplotlib",
+          "seaborns"
           ],
           extras_require={
               "testing": ["pytest==6.2.5", "pytest-cov==2.12.1"],
