@@ -15,13 +15,13 @@ if __name__ == '__main__':
           url="https://github.com/danieleongari/definitive_screening_design",
           license="None",
           classifiers=["Programming Language :: Python"],
-          version="0.3.0",
+          version="0.3.1",
           install_requires=[
           "numpy",
           "pandas",
           "sympy",
           "matplotlib",
-          "seaborns"
+          "seaborn"
           ],
           extras_require={
               "testing": ["pytest==6.2.5", "pytest-cov==2.12.1"],
