@@ -3,4 +3,4 @@
 from .design import generate
 from .analysis import get_map_of_correlations
 
-__version__ = "0.3.1"
+__version__ = "0.4.0"

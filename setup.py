@@ -15,7 +15,7 @@ if __name__ == '__main__':
           url="https://github.com/danieleongari/definitive_screening_design",
           license="None",
           classifiers=["Programming Language :: Python"],
-          version="0.3.1",
+          version="0.4.0",
           install_requires=[
           "numpy",
           "pandas",
