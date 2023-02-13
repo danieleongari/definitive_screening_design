@@ -70,7 +70,7 @@ def get_paley_matrix(q):
     return paley_matrix
 
 
-def compute_dsd(nctn, ncat=0, designChoice="dsd"):
+def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     """DSD calculates definitive screening design conditions given an number 
     of continuous (nctn) and categorical (ncat) factors, based on:
 
