@@ -7,9 +7,12 @@
 
 ## Further References about the practical use of this design
 
-- Bradley Jones. ["Proper and Improper use of Definitive Screening Designs"](https://community.jmp.com/t5/JMP-Blog/Proper-and-improper-use-of-Definitive-Screening-Designs-DSDs/ba-p/30703?trMode=source)
-- Douglas Motngomery. [Coursera lesson on "General Structure of a DSD with m Factors"](https://www.coursera.org/lecture/response-surfaces-mixtures-model-building/general-structure-of-a-definitive-screening-design-with-m-factors-N1Ebc)
-- Paul Nelson. ["The Evolution of Definitive Screening Designs from Optimal (Custom) DoE"](https://www.prismtc.co.uk/resources/blogs-and-articles/article-the-evolution-of-definitive-screening-designs-from-optimal-custom-design-of-experiments)
+- Bradley Jones - ["Proper and Improper use of Definitive Screening Designs"](https://community.jmp.com/t5/JMP-Blog/Proper-and-improper-use-of-Definitive-Screening-Designs-DSDs/ba-p/30703?trMode=source)
+- Douglas Montgomery - [Coursera lesson on "General Structure of a DSD with m Factors"](https://www.coursera.org/lecture/response-surfaces-mixtures-model-building/general-structure-of-a-definitive-screening-design-with-m-factors-N1Ebc)
+- Paul Nelson - ["The Evolution of Definitive Screening Designs from Optimal (Custom) DoE"](https://www.prismtc.co.uk/resources/blogs-and-articles/article-the-evolution-of-definitive-screening-designs-from-optimal-custom-design-of-experiments)
+- Errore, Jones, Nachtsheim (2016) - ["Using Definitive Screening Designs to Identify Active First- and Second-Order Factor Effects"](https://www.tandfonline.com/doi/full/10.1080/00224065.2017.11917993)
+- Jones, Nachtesheim (2017) ["Effective Design-Based Model Selection for Definitive Screening Designs"](https://www.tandfonline.com/doi/full/10.1080/00401706.2016.1234979)
+- Weese, Ramsey, Montgomery (2018) - ["Analysis of definitive screening designs: Screening vs prediction"](https://onlinelibrary.wiley.com/doi/10.1002/asmb.2297)
 
 ## Installation
 ```
