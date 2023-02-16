@@ -6,7 +6,7 @@
 - Bradley Jones and Christopher J. Nachtsheim. "Definitive screening designs with added two-level categorical factors" Journal of Quality Technology 45.2 (2013): 121-129. https://doi.org/10.1080/00224065.2013.11917921
 
 ## Further References about the practical use of this design
-
+- Bradley Jones - ["Simulating Responses and Fitting Definitive Screening Designs"](https://community.jmp.com/t5/Discovery-Summit-2017/Simulating-Responses-and-Fitting-Definitive-Screening-Designs/ta-p/44056)
 - Bradley Jones - ["Proper and Improper use of Definitive Screening Designs"](https://community.jmp.com/t5/JMP-Blog/Proper-and-improper-use-of-Definitive-Screening-Designs-DSDs/ba-p/30703?trMode=source)
 - Douglas Montgomery - [Coursera lesson on "General Structure of a DSD with m Factors"](https://www.coursera.org/lecture/response-surfaces-mixtures-model-building/general-structure-of-a-definitive-screening-design-with-m-factors-N1Ebc)
 - Paul Nelson - ["The Evolution of Definitive Screening Designs from Optimal (Custom) DoE"](https://www.prismtc.co.uk/resources/blogs-and-articles/article-the-evolution-of-definitive-screening-designs-from-optimal-custom-design-of-experiments)
