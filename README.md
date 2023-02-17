@@ -2,8 +2,9 @@
 
 ## Main References
 
-- Bradley Jones and Christopher J. Nachtsheim. "A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects" Journal of Quality Technology 43, no. 1 (January 2011): 1–15. https://doi.org/10.1080/00224065.2011.11917841.
-- Bradley Jones and Christopher J. Nachtsheim. "Definitive screening designs with added two-level categorical factors" Journal of Quality Technology 45.2 (2013): 121-129. https://doi.org/10.1080/00224065.2013.11917921
+- Bradley Jones and Christopher J. Nachtsheim. "A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects" Journal of Quality Technology (2011) 43, 1–15. [10.1080/00224065.2011.11917841](https://doi.org/10.1080/00224065.2011.11917841)
+- Lili Xiao, Dennis K. J. Lin, Fenghan Bai, "Constructing Definitive Screening Designs Using Conference Matrices" Journal of Quality Technology (2012) 44, 2-8. [10.1080/00224065.2012.11917877](https://doi.org/10.1080/00224065.2012.11917877)
+- Bradley Jones and Christopher J. Nachtsheim. "Definitive screening designs with added two-level categorical factors" Journal of Quality Technology (2013) 45, 121-129. [10.1080/00224065.2013.11917921](https://doi.org/10.1080/00224065.2013.11917921)
 
 ## Further References about the practical use of this design
 - Bradley Jones - ["Simulating Responses and Fitting Definitive Screening Designs"](https://community.jmp.com/t5/Discovery-Summit-2017/Simulating-Responses-and-Fitting-Definitive-Screening-Designs/ta-p/44056)
