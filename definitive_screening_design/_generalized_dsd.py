@@ -74,13 +74,18 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     """DSD calculates definitive screening design conditions given an number 
     of continuous (nctn) and categorical (ncat) factors, based on:
 
-    Jones, B and Nachtsheim, C. (2011)
+    Jones, B. and Nachtsheim, C. (2011)
         "A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects"
         Journal of Quality Technology, 43, 1-15
+       
+    Xiao, L., Lin D. K. and Bai, F. (2012)
+        "Constructing Definitive Screening Designs Using Conference Matrices"
+        Journal of Quality Technology, 44, 2-8
 
-    Jones, B and Nachtsheim, C. (2013)
+    Jones, B. and Nachtsheim, C. (2013)
         "Definitive Screening Designs with Added Two-Level Categorical Factors"
         Journal of Quality Technology, 45, 121-129
+        
     Usage:  f=dsd(nf,ncat,designChoice)
 
     Inputs: nctn: Number of continuous factors
