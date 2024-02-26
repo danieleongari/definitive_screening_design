@@ -34,6 +34,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 import numpy as np
 
 def isprime(p):
+    """  this 'isprime' is a basic primality checker in a somewhat slow method; it works to replace sympy implementation;
+           we check for 1, 2 as prime, even numbers as not-prime, and then see if residue of number @p with divisors from (2 to ceil(p/2)+1) if they are non-zero to ensure primality"""
     if p <= 2: return True    
     if p%2 == 0: return False
     return all(np.mod(p,np.arange(2,p//2+1))!=0)
