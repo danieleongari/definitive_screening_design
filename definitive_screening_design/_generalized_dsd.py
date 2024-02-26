@@ -32,8 +32,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 """
 
 import numpy as np
-from sympy import isprime, legendre
 
+def isprime(p):
+    if p <= 2: return True    
+    if p%2 == 0: return False
+    return all(np.mod(p,np.arange(2,p//2+1))!=0)
 
 def get_legendre(i, j, fld):
     """Generate legendre symbol given i,j and fld."""
