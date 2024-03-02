@@ -3,8 +3,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import combinations
-import pandas as pd
 import seaborn as sns
+
 
 def get_X(A, effects=["intercept", "main", "2-interactions", "quadratic"], return_names=False):
     """Given the matrix A of the experiment design and the effects included in the model,
@@ -26,17 +26,17 @@ def get_X(A, effects=["intercept", "main", "2-interactions", "quadratic"], retur
     else:
         raise Exception("Main effects should be present!")
     if "2-interactions" in effects:
-        for i, j in combinations(range(nfactors),2):
+        for i, j in combinations(range(nfactors), 2):
             names.append(f"X{i+1}*X{j+1}")
-            arrays_to_stack.append((A[:,i]*A[:,j]).reshape(-1, 1))
+            arrays_to_stack.append((A[:, i] * A[:, j]).reshape(-1, 1))
     if "3-interactions" in effects:
-        for i, j, k in combinations(range(nfactors),3):
+        for i, j, k in combinations(range(nfactors), 3):
             names.append(f"X{i+1}*X{j+1}*X{k+1}")
-            arrays_to_stack.append((A[:,i]*A[:,j]*A[:,k]).reshape(-1, 1))
+            arrays_to_stack.append((A[:, i] * A[:, j] * A[:, k]).reshape(-1, 1))
     if "quadratic" in effects:
         for i in range(A.shape[1]):
             names.append(f"X{i+1}^2")
-            arrays_to_stack.append((A[:,i]*A[:,i]).reshape(-1, 1))
+            arrays_to_stack.append((A[:, i] * A[:, i]).reshape(-1, 1))
 
     X = np.hstack(arrays_to_stack)
 
@@ -59,12 +59,12 @@ def get_efficiency(A, effects=["intercept", "main"]):
     XTX = np.dot(X.T, X)
     n_trials, n_params = X.shape
     try:
-        D_eff = 100 * np.linalg.det(XTX)**(1/n_params)/n_trials
-    except:
+        D_eff = 100 * np.linalg.det(XTX) ** (1 / n_params) / n_trials
+    except Exception:
         D_eff = 0
     try:
         A_eff = 100 * n_params / (n_trials * np.trace(np.linalg.inv(XTX)))
-    except:
+    except Exception:
         A_eff = 0
 
     return {
@@ -88,12 +88,12 @@ def get_variance(x, A, effects=["intercept", "main"]):
     if "main" not in effects:
         raise Exception("Main effects should be present!")
     if "2-interactions" in effects:
-        for i, j in combinations(range(n_factors),2):
-            xixj = x_copy[i,:] * x_copy[j,:]
+        for i, j in combinations(range(n_factors), 2):
+            xixj = x_copy[i, :] * x_copy[j, :]
             x = np.vstack([x, xixj])
     if "3-interactions" in effects:
-        for i, j, k in combinations(range(n_factors),3):
-            xixjxk = x_copy[i,:] * x_copy[j,:] * x_copy[k,:]
+        for i, j, k in combinations(range(n_factors), 3):
+            xixjxk = x_copy[i, :] * x_copy[j, :] * x_copy[k, :]
             x = np.vstack([x, xixjxk])
     if "quadratic" in effects:
         x = np.vstack([x, x_copy**2])
@@ -103,18 +103,24 @@ def get_variance(x, A, effects=["intercept", "main"]):
     var = x.T.dot(np.linalg.inv(XTX)).dot(x)
     var = var[-1, :]
     return var
-    
-    
-def get_map_of_correlations(A, effects=["intercept", "main", "2-interactions", "3-interactions", "quadratic"], 
-                            absolute=True, plot=True, annot=True, figsize=(11,9)):
+
+
+def get_map_of_correlations(
+    A,
+    effects=["intercept", "main", "2-interactions", "3-interactions", "quadratic"],
+    absolute=True,
+    plot=True,
+    annot=True,
+    figsize=(11, 9),
+):
     """Get the map of correlations.
     Compare with: https://rdrr.io/cran/daewr/man/colormap.html
-    
+
     Inputs:
 
         A (numpy.array)
             DOE array.
-        
+
         effects (list)
             List of effects, choose among:
                 - "intercept"
@@ -142,32 +148,33 @@ def get_map_of_correlations(A, effects=["intercept", "main", "2-interactions", "
     """
 
     X, names = get_X(A, effects, return_names=True)
-    if "intercept" in effects: # remove intercept from X for computing correlations
-        X = X[:,1:]
+    if "intercept" in effects:  # remove intercept from X for computing correlations
+        X = X[:, 1:]
         names = names[1:]
 
     moc = np.corrcoef(X, rowvar=False)
 
     if absolute:
         moc = abs(moc)
-        vmin = 0 
+        vmin = 0
     else:
-        vmin=-1 # Colors won't looking good anyway
+        vmin = -1  # Colors won't looking good anyway
 
     if plot:
-        mask = np.invert(np.tril(np.ones_like(moc, dtype=bool))) # Show only bottom-left corner, including the diagonal
-        #cmap = sns.diverging_palette(h_neg=130, h_pos=359, s=100, l=60, sep=1, n=None, center="light", as_cmap=True)
+        mask = np.invert(np.tril(np.ones_like(moc, dtype=bool)))  # Show only bottom-left corner, including the diagonal
+        # cmap = sns.diverging_palette(h_neg=130, h_pos=359, s=100, l=60, sep=1, n=None, center="light", as_cmap=True)
         f, ax = plt.subplots(figsize=figsize)
         sns.heatmap(
-            data=moc, 
+            data=moc,
             cmap="RdYlGn_r",
-            annot=annot, 
-            mask=mask, 
-            vmin=vmin, 
-            vmax=1, 
-            xticklabels=names, 
+            annot=annot,
+            mask=mask,
+            vmin=vmin,
+            vmax=1,
+            xticklabels=names,
             yticklabels=names,
-            square=True, linewidths=.5
+            square=True,
+            linewidths=0.5,
         )
         plt.show()
 

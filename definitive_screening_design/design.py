@@ -4,9 +4,12 @@ import pandas as pd
 
 from ._generalized_dsd import _compute_dsd
 
-def generate(n_num=0, n_cat=0, factors_dict=None, method='dsd', min_13=True, n_fake_factors=0, verbose=True) -> pd.DataFrame:
+
+def generate(
+    n_num=0, n_cat=0, factors_dict=None, method="dsd", min_13=True, n_fake_factors=0, verbose=True
+) -> pd.DataFrame:
     """Generate DSD with 2-levels categoricals design from calculation (Jones 2013).
-    
+
     INPUTS
 
         n_num (int)
@@ -31,10 +34,10 @@ def generate(n_num=0, n_cat=0, factors_dict=None, method='dsd', min_13=True, n_f
 
         n_fake_factors (int)
             Include numerical fake factors to increase the number of trials and have a larger design.
-            Suggested use: 
-                n_fake_factors=2 -> adds 4 trials, 
-                n_fake_factors=4 -> adds 8 trials, 
-                n_fake_factors=6 -> adds 12 trials, 
+            Suggested use:
+                n_fake_factors=2 -> adds 4 trials,
+                n_fake_factors=4 -> adds 8 trials,
+                n_fake_factors=6 -> adds 12 trials,
                 ...
 
         verbose (bool)
@@ -47,24 +50,24 @@ def generate(n_num=0, n_cat=0, factors_dict=None, method='dsd', min_13=True, n_f
 
     """
 
-    assert n_num+n_cat>0 or factors_dict is not None, "You need to specify at least n_num>0 or n_cat>0."
+    assert n_num + n_cat > 0 or factors_dict is not None, "You need to specify at least n_num>0 or n_cat>0."
 
     num_nms, cat_nms = [], []
     if factors_dict is None:
         factors_dict = {}
-        for i in range(1, n_num+1):
+        for i in range(1, n_num + 1):
             factor_nm = f"X{i:02d}"
             factors_dict[factor_nm] = (-1, 1)
             num_nms.append(factor_nm)
-        for i in range(1, n_cat+1):
+        for i in range(1, n_cat + 1):
             factor_nm = f"C{i:02d}"
-            factors_dict[factor_nm] = ("A", "B")   
-            cat_nms.append(factor_nm)     
+            factors_dict[factor_nm] = ("A", "B")
+            cat_nms.append(factor_nm)
         if verbose:
-            print(f"Generating a Definitive Screening Design with {n_num} numerical and {n_cat} categorical factors.")   
+            print(f"Generating a Definitive Screening Design with {n_num} numerical and {n_cat} categorical factors.")
     else:
         for factor_nm, factor_range in factors_dict.items():
-            if len(factor_range)!=2:
+            if len(factor_range) != 2:
                 raise ValueError(f"Factor `{factor_nm}` has not two range values: {factor_range}")
             if isinstance(factor_range[0], bool) or isinstance(factor_range[0], str):
                 cat_nms.append(factor_nm)
@@ -73,38 +76,39 @@ def generate(n_num=0, n_cat=0, factors_dict=None, method='dsd', min_13=True, n_f
         n_num = len(num_nms)
         n_cat = len(cat_nms)
         if verbose:
-            print(f"Generating a Definitive Screening Design from factors dictionary: {n_num} numerical and {n_cat} categorical.")       
+            print(
+                f"Generating a Definitive Screening Design from factors dictionary: {n_num} numerical and {n_cat} categorical."
+            )
 
+    if min_13 and (n_num + n_cat + n_fake_factors) < 6:
+        n_fake_factors = 6 - (n_num + n_cat)
 
-    if min_13 and (n_num+n_cat+n_fake_factors)<6:
-        n_fake_factors = 6-(n_num+n_cat)
-
-    dsd_array = _compute_dsd(
-        n_num+n_fake_factors, 
-        n_cat, 
-        method
-    )
+    dsd_array = _compute_dsd(n_num + n_fake_factors, n_cat, method)
 
     dsd_df = pd.DataFrame()
     for i, factor_nm in enumerate(num_nms):
         dsd_df[factor_nm] = dsd_array[:, i]
-        dsd_df[factor_nm] = dsd_df[factor_nm].replace({
-            -1.0: factors_dict[factor_nm][0], 
-             0.0: np.mean(factors_dict[factor_nm]),
-            +1.0: factors_dict[factor_nm][1], 
-        })
+        dsd_df[factor_nm] = dsd_df[factor_nm].replace(
+            {
+                -1.0: factors_dict[factor_nm][0],
+                0.0: np.mean(factors_dict[factor_nm]),
+                +1.0: factors_dict[factor_nm][1],
+            }
+        )
     # NOTE: fake factors are skipped
     for i, factor_nm in enumerate(cat_nms):
-        dsd_df[factor_nm] = dsd_array[:, -len(cat_nms)+i]
-        dsd_df[factor_nm] = dsd_df[factor_nm].replace({
-            1: factors_dict[factor_nm][0], 
-            2: factors_dict[factor_nm][1], 
-        })  
+        dsd_df[factor_nm] = dsd_array[:, -len(cat_nms) + i]
+        dsd_df[factor_nm] = dsd_df[factor_nm].replace(
+            {
+                1: factors_dict[factor_nm][0],
+                2: factors_dict[factor_nm][1],
+            }
+        )
 
     # Restore original order of columns
     dsd_df = dsd_df[list(factors_dict.keys())]
 
     # Set indexes to 1-to-N range (instead of 0-to-(N-1))
-    dsd_df.index = range(1, len(dsd_df)+1)
+    dsd_df.index = range(1, len(dsd_df) + 1)
 
     return dsd_df
