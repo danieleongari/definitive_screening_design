@@ -17,7 +17,7 @@ if __name__ == "__main__":
         license="None",
         classifiers=["Programming Language :: Python"],
         version="0.5.0",
-        install_requires=["numpy", "pandas", "sympy", "matplotlib", "seaborn"],
+        install_requires=["numpy", "pandas", "matplotlib", "seaborn"],
         extras_require={
             "dev": [
                 "pre-commit",
