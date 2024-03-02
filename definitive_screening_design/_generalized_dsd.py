@@ -33,12 +33,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 
 import numpy as np
 
+
 def isprime(p):
-    """  this 'isprime' is a basic primality checker in a somewhat slow method; it works to replace sympy implementation;
-           we check for 1, 2 as prime, even numbers as not-prime, and then see if residue of number @p with divisors from (2 to ceil(p/2)+1) if they are non-zero to ensure primality"""
-    if p <= 2: return True    
-    if p%2 == 0: return False
-    return all(np.mod(p,np.arange(2,p//2+1))!=0)
+    """this 'isprime' is a basic primality checker in a somewhat slow method; it works to replace sympy implementation;
+    we check for 1, 2 as prime, even numbers as not-prime, and then see if residue of number @p with divisors from (2 to ceil(p/2)+1) if they are non-zero to ensure primality"""
+    if p <= 2:
+        return True
+    if p % 2 == 0:
+        return False
+    return all(np.mod(p, np.arange(2, p // 2 + 1)) != 0)
+
 
 def get_legendre(i, j, fld):
     """Generate legendre symbol given i,j and fld."""
@@ -76,13 +80,13 @@ def get_paley_matrix(q):
 
 
 def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
-    """DSD calculates definitive screening design conditions given an number 
+    """DSD calculates definitive screening design conditions given an number
     of continuous (nctn) and categorical (ncat) factors, based on:
 
     Jones, B. and Nachtsheim, C. (2011)
         "A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects"
         Journal of Quality Technology, 43, 1-15
-       
+
     Xiao, L., Lin D. K. and Bai, F. (2012)
         "Constructing Definitive Screening Designs Using Conference Matrices"
         Journal of Quality Technology, 44, 2-8
@@ -90,7 +94,7 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     Jones, B. and Nachtsheim, C. (2013)
         "Definitive Screening Designs with Added Two-Level Categorical Factors"
         Journal of Quality Technology, 45, 121-129
-        
+
     Usage:  f=dsd(nf,ncat,designChoice)
 
     Inputs: nctn: Number of continuous factors
@@ -112,47 +116,51 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     if designChoice not in ["dsd", "orth"]:
         raise Exception("Design Choice must be 'dsd' or 'orth'")
 
-    f10 = np.array([
-        [ 0,  1,  1,  1,  1,  1,  1,  1,  1,  1],
-        [ 1,  0, -1, -1, -1, -1,  1,  1,  1,  1], 
-        [ 1, -1,  0, -1,  1,  1, -1, -1,  1,  1],
-        [ 1, -1, -1,  0,  1,  1,  1,  1, -1, -1],
-        [ 1, -1,  1,  1,  0, -1, -1,  1, -1,  1],
-        [ 1, -1,  1,  1, -1,  0,  1, -1,  1, -1],
-        [ 1,  1, -1,  1, -1,  1,  0, -1, -1,  1],
-        [ 1,  1, -1,  1,  1, -1, -1,  0,  1, -1],
-        [ 1,  1,  1, -1, -1,  1, -1,  1,  0, -1],
-        [ 1,  1,  1, -1,  1, -1,  1, -1, -1,  0],
-        [ 0, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-        [-1,  0,  1,  1,  1,  1, -1, -1, -1, -1],
-        [-1,  1,  0,  1, -1, -1,  1,  1, -1, -1],
-        [-1,  1,  1,  0, -1, -1, -1, -1,  1,  1],
-        [-1,  1, -1, -1,  0,  1,  1, -1,  1, -1],
-        [-1,  1, -1, -1,  1,  0, -1,  1, -1,  1],
-        [ 1, -1,  1, -1,  1, -1,  0,  1,  1, -1],
-        [-1, -1,  1, -1, -1,  1,  1,  0, -1,  1],
-        [-1, -1, -1,  1,  1, -1,  1, -1,  0,  1],
-        [-1, -1, -1,  1, -1,  1, -1,  1,  1,  0]
-    ])
-    f16_half = np.array([
-        [-0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1],
-        [-1,  0,  1,  1, -1,  1, -1, -1,  1, -1,  1,  1, -1,  1, -1, -1],
-        [-1, -1,  0,  1,  1, -1,  1, -1,  1, -1, -1,  1,  1, -1,  1, -1],
-        [-1, -1, -1,  0,  1,  1, -1,  1,  1, -1, -1, -1,  1,  1, -1,  1],
-        [-1,  1, -1, -1,  0,  1,  1, -1,  1,  1, -1, -1, -1,  1,  1, -1],
-        [-1, -1,  1, -1, -1,  0,  1,  1,  1, -1,  1, -1, -1, -1,  1,  1], 
-        [-1,  1, -1,  1, -1, -1,  0,  1,  1,  1, -1,  1, -1, -1, -1,  1], 
-        [-1,  1,  1, -1,  1, -1, -1,  0,  1,  1,  1, -1,  1, -1, -1, -1],
-        [-1, -1, -1, -1, -1, -1, -1, -1,  0,  1,  1,  1,  1,  1,  1,  1],
-        [-1,  1,  1,  1, -1,  1, -1, -1, -1,  0, -1, -1,  1, -1,  1,  1],
-        [-1, -1,  1,  1,  1, -1,  1, -1, -1,  1,  0, -1, -1,  1, -1,  1],
-        [-1, -1, -1,  1,  1,  1, -1,  1, -1,  1,  1,  0, -1, -1,  1, -1],
-        [-1,  1, -1, -1,  1,  1,  1, -1, -1, -1,  1,  1,  0, -1, -1,  1],
-        [-1, -1,  1, -1, -1,  1,  1,  1, -1,  1, -1,  1,  1,  0, -1, -1],
-        [-1,  1, -1,  1, -1, -1,  1,  1, -1, -1,  1, -1,  1,  1,  0, -1],
-        [-1,  1,  1, -1,  1, -1, -1,  1, -1, -1, -1,  1, -1,  1,  1,  0]
-    ])
-    f16 = np.vstack((f16_half, -1*f16_half))
+    f10 = np.array(
+        [
+            [0, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, -1, -1, -1, -1, 1, 1, 1, 1],
+            [1, -1, 0, -1, 1, 1, -1, -1, 1, 1],
+            [1, -1, -1, 0, 1, 1, 1, 1, -1, -1],
+            [1, -1, 1, 1, 0, -1, -1, 1, -1, 1],
+            [1, -1, 1, 1, -1, 0, 1, -1, 1, -1],
+            [1, 1, -1, 1, -1, 1, 0, -1, -1, 1],
+            [1, 1, -1, 1, 1, -1, -1, 0, 1, -1],
+            [1, 1, 1, -1, -1, 1, -1, 1, 0, -1],
+            [1, 1, 1, -1, 1, -1, 1, -1, -1, 0],
+            [0, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+            [-1, 0, 1, 1, 1, 1, -1, -1, -1, -1],
+            [-1, 1, 0, 1, -1, -1, 1, 1, -1, -1],
+            [-1, 1, 1, 0, -1, -1, -1, -1, 1, 1],
+            [-1, 1, -1, -1, 0, 1, 1, -1, 1, -1],
+            [-1, 1, -1, -1, 1, 0, -1, 1, -1, 1],
+            [1, -1, 1, -1, 1, -1, 0, 1, 1, -1],
+            [-1, -1, 1, -1, -1, 1, 1, 0, -1, 1],
+            [-1, -1, -1, 1, 1, -1, 1, -1, 0, 1],
+            [-1, -1, -1, 1, -1, 1, -1, 1, 1, 0],
+        ]
+    )
+    f16_half = np.array(
+        [
+            [-0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [-1, 0, 1, 1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1],
+            [-1, -1, 0, 1, 1, -1, 1, -1, 1, -1, -1, 1, 1, -1, 1, -1],
+            [-1, -1, -1, 0, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1, 1],
+            [-1, 1, -1, -1, 0, 1, 1, -1, 1, 1, -1, -1, -1, 1, 1, -1],
+            [-1, -1, 1, -1, -1, 0, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1],
+            [-1, 1, -1, 1, -1, -1, 0, 1, 1, 1, -1, 1, -1, -1, -1, 1],
+            [-1, 1, 1, -1, 1, -1, -1, 0, 1, 1, 1, -1, 1, -1, -1, -1],
+            [-1, -1, -1, -1, -1, -1, -1, -1, 0, 1, 1, 1, 1, 1, 1, 1],
+            [-1, 1, 1, 1, -1, 1, -1, -1, -1, 0, -1, -1, 1, -1, 1, 1],
+            [-1, -1, 1, 1, 1, -1, 1, -1, -1, 1, 0, -1, -1, 1, -1, 1],
+            [-1, -1, -1, 1, 1, 1, -1, 1, -1, 1, 1, 0, -1, -1, 1, -1],
+            [-1, 1, -1, -1, 1, 1, 1, -1, -1, -1, 1, 1, 0, -1, -1, 1],
+            [-1, -1, 1, -1, -1, 1, 1, 1, -1, 1, -1, 1, 1, 0, -1, -1],
+            [-1, 1, -1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, 1, 0, -1],
+            [-1, 1, 1, -1, 1, -1, -1, 1, -1, -1, -1, 1, -1, 1, 1, 0],
+        ]
+    )
+    f16 = np.vstack((f16_half, -1 * f16_half))
     nf = nctn + ncat  # number of total factors
 
     if 2 * int(np.floor(nf / 2)) == nf:  # nf is even
@@ -163,10 +171,9 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     done = False
     while not done:
         if isprime(p):
-            c = np.hstack((
-                    np.vstack((np.zeros(1), np.ones((p, 1)))), 
-                    np.vstack((np.ones((1, p)), get_paley_matrix(p)))
-                    ))
+            c = np.hstack(
+                (np.vstack((np.zeros(1), np.ones((p, 1)))), np.vstack((np.ones((1, p)), get_paley_matrix(p))))
+            )
             f = np.vstack((c, -c))
             done = True
         else:
@@ -174,30 +181,27 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
 
     # Overvrite f for certain nf
     if nf == 9:
-        f = f10[:,:9]
+        f = f10[:, :9]
     elif nf == 10:
         f = f10
     elif nf == 16:
         f = f16
     elif nf == 15:
-        f = f16[:,:15]
+        f = f16[:, :15]
     elif nf == 26 or nf == 25:
         a = get_paley_matrix(13)
         ## starter vector for B
-        strt = np.array([-1, -1,  1, -1,  1,  1,  1,  1,  1, -1,  1,  1, 1])
+        strt = np.array([-1, -1, 1, -1, 1, 1, 1, 1, 1, -1, 1, 1, 1])
         b = np.array([])
         ## construct B
         for _ in range(13):
-            if b.size==0:
+            if b.size == 0:
                 b = np.transpose(strt)
             else:
                 b = np.transpose(np.vstack((np.transpose(b), strt)))
 
             strt = np.roll(strt, (0, -1))  # circshift
-        c = np.vstack((
-                np.hstack((a, b)), 
-                np.hstack((np.transpose(b),-1 * a))
-        ))
+        c = np.vstack((np.hstack((a, b)), np.hstack((np.transpose(b), -1 * a))))
 
         if nf == 26:
             f = np.vstack((c, -c))
@@ -205,7 +209,7 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
             f = np.vstack((c, -c))
 
     nr, nc = f.shape  # Number of rows and columns before adding categoricals
-    if nc > nf: # Reduce the number of columns
+    if nc > nf:  # Reduce the number of columns
         f = f[:, :nf]
 
     # Add center at the end
@@ -221,31 +225,23 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     f = np.vstack((f, np.zeros((zero_nrows, nf))))
 
     tmpf = f.copy()
-    for rowidx in range(int(nr/2)):
+    for rowidx in range(int(nr / 2)):
         tmpf[2 * rowidx, :] = f[rowidx, :]
-        tmpf[2 * rowidx+1, :] = f[rowidx + int(nr/2), :]
+        tmpf[2 * rowidx + 1, :] = f[rowidx + int(nr / 2), :]
     f = tmpf.copy()
 
     # Correct the categorical values of the centers
     if ncat > 1:
-        if designChoice == "dsd": # there are 2 centers
-            B = np.array([
-                [-1, -1, -1],
-                [+1, +1, +1]
-            ])
+        if designChoice == "dsd":  # there are 2 centers
+            B = np.array([[-1, -1, -1], [+1, +1, +1]])
             for fidx in range(nctn, nf):
                 colidx = np.remainder(fidx - nctn, 3)
-                f[nr:(nr+2), fidx] = B[:, colidx] # WEIRD: colidx is not important as all columns of B are same!
-        elif designChoice == "orth": # there are 4 centers
-            B = np.array([
-                [-1, -1, -1, +1],
-                [-1, -1, +1, -1],
-                [-1, +1, -1, -1],
-                [+1, -1, -1, -1]
-            ])
+                f[nr : (nr + 2), fidx] = B[:, colidx]  # WEIRD: colidx is not important as all columns of B are same!
+        elif designChoice == "orth":  # there are 4 centers
+            B = np.array([[-1, -1, -1, +1], [-1, -1, +1, -1], [-1, +1, -1, -1], [+1, -1, -1, -1]])
             for fidx in range(nctn, nf):
                 colidx = np.remainder(fidx - nctn, 4)
-                f[nr:(nr+4), fidx] = B[:, colidx]
+                f[nr : (nr + 4), fidx] = B[:, colidx]
 
     # Add columns for categoricals
     # Note: in the original code there was minList2 and maxList2 lists that seem unnecessary
@@ -253,9 +249,9 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
     if ncat > 0:
         minCatLevel = 1
         maxCatLevel = 2
-        nr = f.shape[0] # Update nr
-        for fidx in range(nctn, nf): # categorical columns
-            for rowidx in range(nr): # all rows
+        nr = f.shape[0]  # Update nr
+        for fidx in range(nctn, nf):  # categorical columns
+            for rowidx in range(nr):  # all rows
                 if f[rowidx, fidx] == 1:
                     f[rowidx, fidx] = maxCatLevel
                 if f[rowidx, fidx] == -1:
@@ -270,6 +266,5 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
                             f[rowidx, fidx] = maxCatLevel
                     elif designChoice == "orth":
                         f[rowidx, fidx] = maxCatLevel
-
 
     return f
