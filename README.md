@@ -14,6 +14,7 @@
 - Errore, Jones, Nachtsheim (2016) - ["Using Definitive Screening Designs to Identify Active First- and Second-Order Factor Effects"](https://www.tandfonline.com/doi/full/10.1080/00224065.2017.11917993)
 - Jones, Nachtesheim (2017) ["Effective Design-Based Model Selection for Definitive Screening Designs"](https://www.tandfonline.com/doi/full/10.1080/00401706.2016.1234979)
 - Weese, Ramsey, Montgomery (2018) - ["Analysis of definitive screening designs: Screening vs prediction"](https://onlinelibrary.wiley.com/doi/10.1002/asmb.2297)
+- Keisuke Takagaki et al., (2019) - ["The Usefulness of Definitive Screening Design for a Quality by Design Approach ..."](https://www.jstage.jst.go.jp/article/cpb/67/10/67_c19-00553/_article/-char/ja/)
 
 ## Installation
 ```
