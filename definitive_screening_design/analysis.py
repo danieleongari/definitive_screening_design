@@ -1,15 +1,19 @@
-"""Tools to analyse the DOE and the the response collected with the DOE."""
+"""Tools to analyse a DOE and the response collected with it."""
 
-import numpy as np
-import matplotlib.pyplot as plt
 from itertools import combinations
+
+import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 
 
-def get_X(A, effects=["intercept", "main", "2-interactions", "quadratic"], return_names=False):
-    """Given the matrix A of the experiment design and the effects included in the model,
-    return the matrix X to multiply with the coefficients of the model.
-    If `return_names` is True, return also the name of the terms of the polynomium used as model.
+DEFAULT_MODEL_EFFECTS = ("intercept", "main", "2-interactions", "quadratic")
+
+
+def get_X(A, effects=DEFAULT_MODEL_EFFECTS, return_names=False):
+    """Build the model matrix for a design and requested effects.
+
+    If ``return_names`` is true, also return the polynomial term names.
     """
 
     nfactors = A.shape[1]
@@ -46,26 +50,50 @@ def get_X(A, effects=["intercept", "main", "2-interactions", "quadratic"], retur
         return X
 
 
-def get_efficiency(A, effects=["intercept", "main"]):
+def get_efficiency(A, effects=("intercept", "main")):
     """https://www.jmp.com/support/help/Evaluate_Design_Window.shtml#168318
     p = n_params
     n = n_trials
 
     NOTE: G-Efficiency and I-Efficiency require a grid or Monte Carlo evaluation
-          of the variance (see get_variance) in the whole desing space (i.e., typically
-          for -1 to 1 in the number-of-factors dimensionality)
+          of the variance (see get_variance) in the whole design space
+          (typically -1 to 1 in every factor dimension).
     """
-    X = get_X(A, effects=effects)
-    XTX = np.dot(X.T, X)
+    X = np.asarray(get_X(A, effects=effects), dtype=float)
     n_trials, n_params = X.shape
-    try:
-        D_eff = 100 * np.linalg.det(XTX) ** (1 / n_params) / n_trials
-    except Exception:
-        D_eff = 0
-    try:
-        A_eff = 100 * n_params / (n_trials * np.trace(np.linalg.inv(XTX)))
-    except Exception:
-        A_eff = 0
+
+    # Work with the singular values of X rather than det(X.T @ X) and its
+    # inverse.  This avoids spurious negative determinants from round-off and
+    # makes the non-estimable case explicit.
+    singular_values = np.linalg.svd(X, compute_uv=False)
+    if singular_values.size < n_params:
+        rank = singular_values.size
+    elif singular_values.size == 0:
+        rank = 0
+    else:
+        tolerance = (
+            singular_values[0]
+            * max(X.shape)
+            * np.finfo(singular_values.dtype).eps
+        )
+        rank = np.count_nonzero(singular_values > tolerance)
+
+    if rank < n_params:
+        D_eff = 0.0
+        A_eff = 0.0
+    else:
+        # det(X.T @ X) = product(s_i**2).  Accumulating in log space is
+        # stable even when the determinant itself would under/overflow.
+        D_eff = (
+            100.0
+            * np.exp(2.0 * np.mean(np.log(singular_values)))
+            / n_trials
+        )
+        A_eff = (
+            100.0
+            * n_params
+            / (n_trials * np.sum(singular_values**-2))
+        )
 
     return {
         "Number of Trials": n_trials,
@@ -75,7 +103,7 @@ def get_efficiency(A, effects=["intercept", "main"]):
     }
 
 
-def get_variance(x, A, effects=["intercept", "main"]):
+def get_variance(x, A, effects=("intercept", "main")):
     """https://www.jmp.com/support/help/Evaluate_Design_Window.shtml#168318
     x is a numpy.array vertical vector
     """
@@ -100,14 +128,61 @@ def get_variance(x, A, effects=["intercept", "main"]):
 
     X = get_X(A, effects=effects)
     XTX = np.dot(X.T, X)
-    var = x.T.dot(np.linalg.inv(XTX)).dot(x)
-    var = var[-1, :]
-    return var
+    if np.linalg.matrix_rank(X) < X.shape[1]:
+        raise np.linalg.LinAlgError(
+            "Prediction variance is undefined because the requested model "
+            "matrix is rank deficient."
+        )
+    information_inverse = np.linalg.inv(XTX)
+    return np.einsum("ij,jk,ki->i", x.T, information_inverse, x)
+
+
+def _safe_column_correlation(X):
+    """Return column correlations without warnings for constant columns.
+
+    Correlations involving a constant column are mathematically undefined and
+    are represented by ``np.nan``.  Nonconstant columns use the usual Pearson
+    product-moment correlation.
+    """
+
+    X = np.asarray(X, dtype=float)
+    if X.ndim != 2:
+        raise ValueError("X must be a two-dimensional array.")
+    if X.shape[0] < 2:
+        raise ValueError("At least two runs are required for correlations.")
+
+    centered = X - np.mean(X, axis=0)
+    norms = np.linalg.norm(centered, axis=0)
+    column_scale = np.maximum(1.0, np.max(np.abs(X), axis=0))
+    tolerance = (
+        np.finfo(X.dtype).eps * np.sqrt(X.shape[0]) * column_scale
+    )
+    variable = norms > tolerance
+    valid_pairs = np.outer(variable, variable)
+
+    correlations = np.full((X.shape[1], X.shape[1]), np.nan)
+    denominator = np.outer(norms, norms)
+    np.divide(
+        centered.T @ centered,
+        denominator,
+        out=correlations,
+        where=valid_pairs,
+    )
+    correlations[valid_pairs] = np.clip(
+        correlations[valid_pairs], -1.0, 1.0
+    )
+    return correlations
 
 
 def get_map_of_correlations(
     A,
-    effects=["intercept", "main", "2-interactions", "3-interactions", "quadratic"],
+    effects=(
+        "intercept",
+        "main",
+        "2-interactions",
+        "3-interactions",
+        "quadratic",
+    ),
     absolute=True,
     plot=True,
     annot=True,
@@ -148,11 +223,12 @@ def get_map_of_correlations(
     """
 
     X, names = get_X(A, effects, return_names=True)
-    if "intercept" in effects:  # remove intercept from X for computing correlations
+    if "intercept" in effects:
+        # The intercept is constant, so its correlation is undefined.
         X = X[:, 1:]
         names = names[1:]
 
-    moc = np.corrcoef(X, rowvar=False)
+    moc = _safe_column_correlation(X)
 
     if absolute:
         moc = abs(moc)
@@ -161,8 +237,8 @@ def get_map_of_correlations(
         vmin = -1  # Colors won't looking good anyway
 
     if plot:
-        mask = np.invert(np.tril(np.ones_like(moc, dtype=bool)))  # Show only bottom-left corner, including the diagonal
-        # cmap = sns.diverging_palette(h_neg=130, h_pos=359, s=100, l=60, sep=1, n=None, center="light", as_cmap=True)
+        # Show the lower-left triangle, including its diagonal.
+        mask = np.invert(np.tril(np.ones_like(moc, dtype=bool)))
         f, ax = plt.subplots(figsize=figsize)
         sns.heatmap(
             data=moc,
