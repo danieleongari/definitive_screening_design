@@ -1,5 +1,29 @@
 # Definitive Screening Design (DSD)
 
+This repository provides a lightweight Python implementation for constructing definitive
+screening designs with numerical factors and optional two-level categorical factors. A DSD is
+an economical experimental plan for identifying the few important effects among many candidate
+factors while retaining information about curvature and selected second-order effects. The
+package generates the coded run matrix; the accompanying notebooks show how to turn that matrix
+into a randomized experimental run sheet, assess what a proposed model can estimate before
+collecting responses, and analyze the responses afterward. DSDs are screening tools rather than
+automatic model-selection procedures, so conclusions should be checked against subject-matter
+knowledge and, when necessary, confirmed or refined with augmented experiments.
+
+## Why the Definitive Screening Design?
+
+### ELI5
+
+Imagine having many knobs and not knowing which ones matter. A DSD tests carefully chosen combinations of low, middle, and high settings so you can find the important knobs - and notice when "more" is not simply better - with relatively few experiments. It is a first-pass map, not a universal recipe: it works best when most knobs are numeric, can be adjusted independently, and only a few effects are important.
+
+### ELI Scientist/Engineer
+
+A DSD is an economical early-stage experiment for screening several factors, especially continuous ones. The three levels expose curvature while the design keeps estimates of main effects clear of bias from two-factor interactions and quadratic effects; a classical DSD for `m` continuous factors needs only `2m + 1` runs. It can also accommodate a few two-level categorical factors. Use another design when the region is constrained, factors form a mixture, many factors are categorical, a split-plot structure is required, or higher-order effects are expected.
+
+### ELI Statistician
+
+DSDs combine foldover pairs with a center run to produce a second-order-friendly screening design. Linear main effects are mutually orthogonal and orthogonal to quadratic effects and two-factor interactions; all pure quadratics are estimable, and no two-factor interaction is completely confounded with another interaction or a quadratic, although such terms may be correlated. This alias structure supports joint screening for active first- and second-order terms under effect sparsity, but model selection degrades as the number of active terms approaches the run count; augmentation is advisable when many terms may be active or reliable second-order identification is the goal.
+
 ## Main References
 
 - Bradley Jones and Christopher J. Nachtsheim. "A Class of Three-Level Designs for Definitive Screening in the Presence of Second-Order Effects" Journal of Quality Technology (2011) 43, 1–15. [10.1080/00224065.2011.11917841](https://doi.org/10.1080/00224065.2011.11917841)
@@ -47,4 +71,6 @@ dsd.generate(n_num=3, n_cat=2)
 | 13 |     0 |     0 |     0 |     1 |     1 |
 | 14 |     0 |     0 |     0 |     2 |     2 |
 
-Check the `notebooks` folder for further examples and explainations.
+See `notebooks/` for examples using this package and `notebooks_pydoe/` for paired
+examples using pydoe's DSD implementation. Both sets explain how design rows translate into
+experimental run sheets and distinguish design analysis from response-model selection.
