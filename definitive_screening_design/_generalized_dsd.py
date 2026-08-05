@@ -3,7 +3,7 @@
 Ported from JMP script to Matlab 04-Mar-2015
 Jacob Albrecht, BMS
 
-Ported to Python on Saturday 28-May-2022, 
+Ported to Python on Saturday 28-May-2022,
 when outdoor it was warm and sunny but my passion for open-source code kept me at home
 Daniele Ongari
 
@@ -134,7 +134,7 @@ def _compute_dsd(nctn, ncat=0, designChoice="dsd"):
             [-1, 1, 1, 0, -1, -1, -1, -1, 1, 1],
             [-1, 1, -1, -1, 0, 1, 1, -1, 1, -1],
             [-1, 1, -1, -1, 1, 0, -1, 1, -1, 1],
-            [1, -1, 1, -1, 1, -1, 0, 1, 1, -1],
+            [-1, -1, 1, -1, 1, -1, 0, 1, 1, -1],
             [-1, -1, 1, -1, -1, 1, 1, 0, -1, 1],
             [-1, -1, -1, 1, 1, -1, 1, -1, 0, 1],
             [-1, -1, -1, 1, -1, 1, -1, 1, 1, 0],
