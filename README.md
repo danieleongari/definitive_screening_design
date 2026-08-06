@@ -1,5 +1,10 @@
 # Definitive Screening Design (DSD)
 
+> NOTE: [pyDOE](www.github.com/tisimst/pyDOE), in its recent v1.4 release (Aug 2026),
+> now implements this same design: I managed myself that implementation.
+> You are encoureged to use pyDOE instead of this package, to benefit from its broader functionality and active maintenance. 
+> Check out the [notebooks_pydoe](notebooks_pydoe/) folder for examples using pyDOE's DSD implementation.
+
 This repository provides a lightweight Python implementation for constructing definitive
 screening designs with numerical factors and optional two-level categorical factors. A DSD is
 an economical experimental plan for identifying the few important effects among many candidate
