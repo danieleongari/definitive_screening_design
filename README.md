@@ -1,6 +1,6 @@
 # Definitive Screening Design (DSD)
 
-> NOTE: [pyDOE](www.github.com/pydoe/pydoe), in its recent v1.4 release (Aug 2026),
+> NOTE: [pyDOE](https://github.com/pydoe/pydoe), in its recent v1.4 release (Aug 2026),
 > now implements this same design: I managed myself that implementation.
 > You are encoureged to use pyDOE instead of this package, to benefit from its broader functionality and active maintenance. 
 > Check out the [notebooks_pydoe](notebooks_pydoe/) folder for examples using pyDOE's DSD implementation.
